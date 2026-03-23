@@ -1,0 +1,7 @@
+# created by virtualenv automatically
+gitignore
+.venv/
+__pycache__/
+.idea/
+data/listings.csv.gz
+data/cleaned_listings.csv
