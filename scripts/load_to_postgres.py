@@ -8,6 +8,6 @@ df = pd.read_csv("data/cleaned_listings.csv")
 engine = create_engine("postgresql+psycopg2://Gin@localhost:5433/airbnb")
 
 # Load data into the listings table
-df.to_sql("listings", engine, if_exists="append", index=False)
+df.to_sql("listings", engine, if_exists="replace", index=False)
 
 print("Data loaded into PostgreSQL successfully.")
