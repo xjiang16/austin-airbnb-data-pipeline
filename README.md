@@ -1,7 +1,7 @@
 # 🏙️ Austin Airbnb Data Pipeline
 
 ## Overview
-This project is an end-to-end data engineering project using Austin Airbnb listing data from Inside Airbnb.
+This project is an end-to-end data engineering project using Austin Airbnb listing data from Inside Airbnb. The pipeline extracts raw data, transforms and cleans it using Python (pandas), and loads it into a PostgreSQL database for analysis using SQL.
 
 The goal is to build a simple data pipeline that:
 - extracts raw Airbnb listing data
@@ -19,7 +19,11 @@ File used: `listings.csv.gz`
 austin-airbnb-data-pipeline/
 ├── data/
 ├── scripts/
+│   ├── transform_data.py
+│   ├── load_to_postgres.py
+│   ├── pipeline.py
 ├── sql/
+│   └── analysis.sql
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
@@ -33,6 +37,20 @@ austin-airbnb-data-pipeline/
 - SQL
 - Git/GitHub
 - PyCharm
+
+## Pipeline Workflow
+
+```text
+Raw Data (CSV)
+    ↓
+Data Cleaning (Python / pandas)
+    ↓
+Cleaned Data (CSV)
+    ↓
+Load to PostgreSQL
+    ↓
+SQL Analysis
+```
 
 ## What I Built
 This project currently performs the following steps:
@@ -48,16 +66,44 @@ This project currently performs the following steps:
 6. Loads the cleaned data into a PostgreSQL database
 7. Runs SQL queries to analyze listing counts, room types, review patterns, and neighborhood pricing
 
-## Data Cleaning Summary
-- Raw dataset shape: `10,533 rows x 79 columns`
-- Cleaned dataset shape: `10,496 rows x 18 columns`
+## How to Run the Pipeline
 
-## Example SQL Questions Answered
-- How many listings are in the dataset?
-- Which neighborhoods have the highest average prices?
-- What are the most reviewed listings?
-- What is the average rating and average reviews per month?
-- How many listings are entire homes vs private rooms?
+```bash
+python scripts/pipeline.py
+```
+
+This pipeline:
+1. Cleans and transforms raw Airbnb data
+2. Saves the cleaned dataset
+3. Loads the data into PostgreSQL  
+
+## Data Cleaning Summary
+- Raw dataset: `10,533 rows × 79 columns`
+- Cleaned dataset: `10,496 rows × 18 columns`
+- Converted price to numeric format
+- Handled missing values and standardized schema
+
+## Example SQL Analysis
+
+### Total Listings
+```sql
+SELECT COUNT(*) FROM listings;
+```
+
+### Listings by Room Type
+```sql
+SELECT room_type, COUNT(*) 
+FROM listings
+GROUP BY room_type;
+```
+
+### Average Price by Neighborhood
+```sql
+SELECT neighbourhood_cleansed, AVG(price)
+FROM listings
+GROUP BY neighbourhood_cleansed
+ORDER BY AVG(price) DESC;
+```
 
 ## Key Learning Outcomes
 Through this project, I practiced:
@@ -67,7 +113,8 @@ Through this project, I practiced:
 - loading data from Python into PostgreSQL
 - writing SQL queries for analysis
 
-## Next Steps
-- automate the transform + load process with a pipeline script
-- improve the SQL analysis section
-- potentially expand the project with calendar or reviews data
+## Future Improvements
+- Add scheduling (cron / Airflow)
+- Implement incremental loading (instead of full replace)
+- Add logging and monitoring
+- Expand dataset (calendar, reviews)  
