@@ -1,5 +1,12 @@
 import subprocess
 import sys
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 scripts = [
     "scripts/transform_data.py",
@@ -12,7 +19,7 @@ for script in scripts:
     result = subprocess.run([sys.executable, script])
 
     if result.returncode != 0:
-        print(f"\nRunning {script}...\n")
+        logging.error(f"{script} failed.")
         sys.exit(1)
 
-print("\nPipeline completed successfully.\n")
+logging.info("Pipeline completed successfully.")
