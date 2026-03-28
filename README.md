@@ -14,6 +14,14 @@ Source: Inside Airbnb
 City: Austin, Texas  
 File used: `listings.csv.gz`
 
+## Tech Stack
+- Python (pandas)
+- PostgreSQL
+- SQLAlchemy
+- psycopg2
+- SQL
+- Git/GitHub
+
 ## Project Structure
 ```text
 austin-airbnb-data-pipeline/
@@ -28,15 +36,6 @@ austin-airbnb-data-pipeline/
 ├── requirements.txt
 ├── .gitignore
 ```
-## Tools Used
-- Python
-- pandas
-- PostgreSQL
-- SQLAlchemy
-- psycopg2
-- SQL
-- Git/GitHub
-- PyCharm
 
 ## Pipeline Workflow
 
@@ -105,16 +104,15 @@ GROUP BY neighbourhood_cleansed
 ORDER BY AVG(price) DESC;
 ```
 
-## Key Learning Outcomes
-Through this project, I practiced:
-- working with real-world raw data
-- cleaning and transforming data with pandas
-- designing a PostgreSQL table schema
-- loading data from Python into PostgreSQL
-- writing SQL queries for analysis
+## Key Takeaways
+- Built an end-to-end ETL pipeline using Python and PostgreSQL
+- Cleaned and transformed real-world dataset
+- Designed and queried a relational database using SQL
+- Automated workflow using a Python pipeline script
+- Added structured logging for pipeline observability
 
 ## Future Improvements
 - Add scheduling (cron / Airflow)
 - Implement incremental loading (instead of full replace)
-- Add logging and monitoring
+- Add more robust logging and monitoring
 - Expand dataset (calendar, reviews)  
