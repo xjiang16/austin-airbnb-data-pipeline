@@ -46,7 +46,9 @@ Data Cleaning (Python / pandas)
     ↓
 Cleaned Data (CSV)
     ↓
-Load to PostgreSQL
+Staging Table (PostgreSQL)
+    ↓
+Upsert into Main Table
     ↓
 SQL Analysis
 ```
@@ -63,7 +65,9 @@ This project currently performs the following steps:
     - dropping rows missing key fields
 5. Saves the cleaned dataset as `cleaned_listings.csv`
 6. Loads the cleaned data into a PostgreSQL database
-7. Runs SQL queries to analyze listing counts, room types, review patterns, and neighborhood pricing
+7. Performs upsert (insert/update) into the main `listings` table
+8. Enables SQL-based analysis on structured data
+
 
 ## How to Run the Pipeline
 
@@ -76,11 +80,25 @@ This pipeline:
 2. Saves the cleaned dataset
 3. Loads the data into PostgreSQL  
 
+
+## Incremental Loading
+
+The pipeline uses a staging table (`listings_staging`) and PostgreSQL `ON CONFLICT` logic to simulate incremental loading.
+
+Each run:
+- loads data into a staging table
+- inserts new records
+- updates existing records based on primary key (`id`)
+
+This approach avoids full table replacement and reflects real-world ETL practices.
+
+
 ## Data Cleaning Summary
 - Raw dataset: `10,533 rows × 79 columns`
 - Cleaned dataset: `10,496 rows × 18 columns`
 - Converted price to numeric format
 - Handled missing values and standardized schema
+
 
 ## Example SQL Analysis
 
@@ -106,13 +124,13 @@ ORDER BY AVG(price) DESC;
 
 ## Key Takeaways
 - Built an end-to-end ETL pipeline using Python and PostgreSQL
-- Cleaned and transformed real-world dataset
+- Cleaned and transformed a real-world dataset
 - Designed and queried a relational database using SQL
-- Automated workflow using a Python pipeline script
+- Implemented incremental loading using staging tables and upsert logic
 - Added structured logging for pipeline observability
 
 ## Future Improvements
 - Add scheduling (cron / Airflow)
-- Implement incremental loading (instead of full replace)
-- Add more robust logging and monitoring
-- Expand dataset (calendar, reviews)  
+- Add data quality validation checks
+- Expand dataset (calendar, reviews)
+- Build dashboard or API layer  
