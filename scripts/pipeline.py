@@ -10,6 +10,7 @@ logging.basicConfig(
 
 scripts = [
     "scripts/transform_data.py",
+    "scripts/validate_data.py",
     "scripts/load_to_postgres.py",
 ]
 
