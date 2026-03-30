@@ -5,3 +5,4 @@ __pycache__/
 .idea/
 data/listings.csv.gz
 data/cleaned_listings.csv
+.env
