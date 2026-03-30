@@ -14,6 +14,18 @@ Source: Inside Airbnb
 City: Austin, Texas  
 File used: `listings.csv.gz`
 
+## Configuration
+
+Database settings are managed with environment variables in a local `.env` file.
+
+Example:
+```env
+DB_USER=Gin
+DB_HOST=localhost
+DB_PORT=5433
+DB_NAME=airbnb
+```
+
 ## Tech Stack
 - Python (pandas)
 - PostgreSQL
@@ -70,6 +82,7 @@ This project currently performs the following steps:
 6. Loads data into a PostgreSQL staging table
 7. Performs upsert (insert/update) into the main `listings` table
 8. Enables SQL-based analysis on structured data
+9. Reads database configuration from environment variables for flexible local setup
 
 
 ## How to Run the Pipeline
@@ -132,6 +145,7 @@ ORDER BY AVG(price) DESC;
 - Implemented incremental loading using staging tables and upsert logic
 - Added structured logging for pipeline observability
 - Added data quality checks for empty datasets, nulls, and duplicate IDs
+- Externalized database configuration using environment variables
 
 ## Future Improvements
 - Add scheduling (cron / Airflow)
