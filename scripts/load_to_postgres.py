@@ -1,37 +1,41 @@
 import pandas as pd
 from sqlalchemy import create_engine, text
 import logging
+import os
+from dotenv import load_dotenv
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
 logging.info("Loading cleaned CSV...")
 
-# Load cleaned CSV
 df = pd.read_csv("data/cleaned_listings.csv")
-
 logging.info(f"Loaded {len(df)} rows")
 
-# Connect to PostgreSQL
-engine = create_engine("postgresql+psycopg2://Gin@localhost:5433/airbnb")
+engine = create_engine(
+    f"postgresql+psycopg2://{DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
-# Step 1: load into staging table
 logging.info("Loading data into staging table...")
 df.to_sql("listings_staging", engine, if_exists="replace", index=False)
 
 with engine.connect() as conn:
-
     logging.info("Upserting into main listings table...")
 
-    # Create main table if not exists
     conn.execute(text("""
         CREATE TABLE IF NOT EXISTS listings AS
         SELECT * FROM listings_staging WHERE 1=0;
     """))
 
-    # Add primary key if not exists
     conn.execute(text("""
         DO $$
         BEGIN
@@ -46,7 +50,6 @@ with engine.connect() as conn:
         $$;
     """))
 
-    # UPSERT logic
     conn.execute(text("""
         INSERT INTO listings
         SELECT * FROM listings_staging
@@ -72,4 +75,3 @@ with engine.connect() as conn:
     """))
 
 logging.info("Data successfully upserted into PostgreSQL.")
-
