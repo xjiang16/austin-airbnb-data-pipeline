@@ -57,14 +57,17 @@ SQL Analysis
 This project currently performs the following steps:
 
 1. Reads raw Airbnb listing data from a compressed CSV file
-2. Explores the dataset to understand columns and structure
-3. Selects 18 relevant columns for analysis
-4. Cleans the data by:
-    - converting price to numeric format
-    - handling missing values
-    - dropping rows missing key fields
-5. Saves the cleaned dataset as `cleaned_listings.csv`
-6. Loads the cleaned data into a PostgreSQL database
+2. Selects 18 relevant columns for analysis
+3. Cleans the dataset:
+   - converts price to numeric format
+   - handles missing values
+   - drops rows missing key fields
+4. Saves cleaned data as `cleaned_listings.csv`
+5. Validates the cleaned dataset:
+   - checks that the dataset is not empty
+   - checks for nulls in critical columns
+   - checks that listing IDs are unique
+6. Loads data into a PostgreSQL staging table
 7. Performs upsert (insert/update) into the main `listings` table
 8. Enables SQL-based analysis on structured data
 
@@ -128,6 +131,7 @@ ORDER BY AVG(price) DESC;
 - Designed and queried a relational database using SQL
 - Implemented incremental loading using staging tables and upsert logic
 - Added structured logging for pipeline observability
+- Added data quality checks for empty datasets, nulls, and duplicate IDs
 
 ## Future Improvements
 - Add scheduling (cron / Airflow)
